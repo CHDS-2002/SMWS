@@ -1,0 +1,32 @@
+import requests
+
+# Вставьте ваш API-ключ из OpenRouter
+API_KEY = "sk-675084eeeee14b34ad60b62c5bc63c44"
+MODEL = "DeepSeek-R1"
+
+def get_deepseek_response(prompt):
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": MODEL,
+        "prompt": prompt
+    }
+    response = requests.post(
+        "https://api.openrouter.ai/api/v1/generate",
+        headers=headers,
+        json=data
+    )
+    return response.json()
+
+def process_table_data(table_data):
+    for row in table_data:
+        # Формируем промпт на основе данных из таблицы
+        prompt = f"Обработай данные: {row['input_column']}"
+        try:
+            response = get_deepseek_response(prompt)
+            row['output_column'] = response['content']
+        except Exception as e:
+            row['output_column'] = f"Ошибка: {str(e)}"
+    return table_data
