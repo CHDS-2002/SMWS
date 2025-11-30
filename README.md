@@ -1,1 +1,1 @@
-This is the solution of task packages_modules
+Решение задач для МТС
